@@ -1,101 +1,44 @@
+
+use std::rc::Rc;
 use yew::prelude::*;
-use serde::Deserialize;
-use gloo_net::http::Request;
 
-#[derive(Clone, PartialEq, Deserialize)]
-struct Video {
-    id: usize,
-    title: String,
-    speaker: String,
-    url: String,
+#[derive(Clone, PartialEq, Properties)]
+pub struct ListItemProps {
+    value: String,
 }
 
-#[derive(Properties, PartialEq)]
-struct VideosListProps {
-    videos: Vec<Video>,
-    on_click: Callback<Video>
-}
+#[function_component]
+fn ListItem(props: &ListItemProps) -> Html {
+    let ListItemProps { value } = props.clone();
 
-#[function_component(VideosList)]
-fn videos_list(VideosListProps { videos, on_click }: &VideosListProps) -> Html {
-    let on_click = on_click.clone();
-    videos.iter().map(|video| {
-        let on_video_select = {
-            let on_click = on_click.clone();
-            let video = video.clone();
-            Callback::from(move |_| {
-                on_click.emit(video.clone())
-            })
-        };
-
-        html! {
-            <p key={video.id} onclick={on_video_select}>{format!("{}: {}", video.speaker, video.title)}</p>
-        }
-
-    }).collect()
-}
-
-#[derive(Properties, PartialEq)]
-struct VideosDetailsProps {
-    video: Video,
-}
-
-#[function_component(VideoDetails)]
-fn video_details(VideosDetailsProps { video }: &VideosDetailsProps) -> Html {
     html! {
-        <div>
-            <h3>{ video.title.clone() }</h3>
-            <img src="https://via.placeholder.com/640x360.png?text=Video+Player+Placeholder" alt="video thumbnail" />
-        </div>
+        <span>
+            { value }
+        </span>
     }
 }
 
-#[function_component(App)]
-fn app() -> Html {
-    let videos = use_state(|| vec![]);
-    {
-        let videos = videos.clone();
-        use_effect_with_deps(move |_| {
-            let videos = videos.clone();
-            wasm_bindgen_futures::spawn_local(async move {
-                let fetched_videos: Vec<Video> = Request::get("/tutorial/data.json")
-                    .send()
-                    .await
-                    .unwrap()
-                    .json()
-                    .await
-                    .unwrap();
-                videos.set(fetched_videos);
-            });
-            || ()
-        }, ());
-    }
+#[derive(PartialEq, Properties)]
+pub struct Props {
+    pub children: ChildrenWithProps<ListItem>,
+}
 
-    let selected_video = use_state(|| None);
-
-    let on_video_select = {
-        let selected_video = selected_video.clone();
-        Callback::from(move |video: Video| {
-            selected_video.set(Some(video))
-        })
-    };
-
-    let details = selected_video.as_ref().map(|video| html! {
-        <VideoDetails video={ video.clone() } />
+[#function_component]
+fn List(props: &Props) -> Html {
+    let modified_children = props.children
+        .iter()
+        .map(|mut item| {
+            let mut props = Rc::make_mut(&mut item.props);
+            props.value = format!("item-{}", props.value);
+            item
     });
-
-    html! {
-        <>
-            <h1>{ "RustConf Explorer" }</h1>
-            <div>
-                <h3>{ "Videos to Watch" }</h3>
-                <VideosList videos={ (*videos).clone() } on_click={ on_video_select.clone() } />
-            </div>
-            { for details }
-        </>
-    }
+    html! { for modified_children }
 }
 
-fn main() {
-    yew::Renderer::<App>::new().render();
-}
+html! {
+    <List>
+        <ListItem value="a" />
+        <ListItem value="b" />
+        <ListItem value="c" />
+    </List>
+};
