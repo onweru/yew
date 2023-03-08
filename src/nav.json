@@ -2,56 +2,56 @@
   {
     "label": "Company",
     "url": "#company",
-    "icon": "home-icon.svg"
+    "icon": "home-icon"
   },
   {
     "label": "Departments",
     "url": "#departments",
-    "icon": "briefcase-icon.svg"
+    "icon": "briefcase-icon"
   },
   {
     "label": "Allowances",
     "url": "#allowances",
-    "icon": "user-check-icon.svg"
+    "icon": "user-check-icon"
   },
   {
     "label": "Leave Types",
     "url": "#leave-types",
-    "icon": "feather-icon.svg"
+    "icon": "feather-icon"
   },
   {
     "label": "Holidays",
     "url": "#holidays",
-    "icon": "umbrella-icon.svg"
+    "icon": "umbrella-icon"
   },
   {
     "label": "Employees",
     "url": "#employees",
-    "icon": "users-icon.svg"
+    "icon": "users-icon"
   },
   {
     "label": "Calendar",
     "url": "#calendar",
-    "icon": "calendar-icon.svg"
+    "icon": "calendar-icon"
   },
   {
     "label": "Limits",
     "url": "#limits",
-    "icon": "clock-icon.svg"
+    "icon": "clock-icon"
   },
   {
     "label": "Bulk Import",
     "url": "#bulk-import",
-    "icon": "upload-icon.svg"
+    "icon": "upload-icon"
   },
   {
     "label": "Integrations",
     "url": "#integrations",
-    "icon": "briefcase-icon.svg"
+    "icon": "briefcase-icon"
   },
   {
     "label": "Billing",
     "url": "#billing",
-    "icon": "credit-card-icon.svg"
+    "icon": "credit-card-icon"
   }
 ]
